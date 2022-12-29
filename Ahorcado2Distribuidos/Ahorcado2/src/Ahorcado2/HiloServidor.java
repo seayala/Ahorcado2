@@ -3,6 +3,7 @@ package Ahorcado2;
 import java.io.*;
 import java.net.*;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 
 //Para que el servidor conecte a los clientes
@@ -19,16 +20,24 @@ public class HiloServidor extends Thread{
 	}
 	
 	public void run() {
-		try(DataOutputStream dos = new DataOutputStream(s.getOutputStream())){
+		Random r = new Random();
+		try(ObjectOutputStream oos = new ObjectOutputStream(s.getOutputStream())){
 			
 			this.jugadores.add(new DatosUsuario(this.s.getInetAddress().toString(), this.s.getPort()));
+			
+			int posicion = r.nextInt(this.jugadores.size());
+			int aux = 0;
 			//this.count.countDown();
 			//Enviamos
 			for(DatosUsuario du : this.jugadores) {
-				dos.writeBytes(du.getHost() + " ? " + du.getPort() + "\r\n");
-				dos.flush();
+				if(aux == posicion) {
+					du.setMaster(true);
+				}
+				oos.writeObject(du);
+				oos.flush();
+				aux++;
 			}
-			
+			oos.writeObject(null); //Si no enviamos un objeto vacío salta una excepcion en la lectura, porque no lee nunca null
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -45,4 +54,5 @@ public class HiloServidor extends Thread{
 	
 	
 }
+
 
