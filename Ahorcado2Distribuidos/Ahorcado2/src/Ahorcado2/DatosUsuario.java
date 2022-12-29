@@ -1,9 +1,24 @@
 package Ahorcado2;
 
-public class DatosUsuario {
+import java.io.Serializable;
+
+public class DatosUsuario implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 28L;
 	private String host;
 	private int port;
+	private boolean master;
 	
+	public boolean getMaster() {
+		return master;
+	}
+
+	public void setMaster(boolean master) {
+		this.master = master;
+	}
+
 	public String getHost() {
 		return host;
 	}
@@ -24,12 +39,17 @@ public class DatosUsuario {
 		super();
 		this.host = host;
 		this.port = port;
+		this.master = false;
 	}
 
 	@Override
 	public String toString() {
+		if(this.master) {
+			return "Direccion IP: " + host + ", puerto: " + port + " (Maestro)";
+		}
 		return "Direccion IP: " + host + ", puerto: " + port;
 	}
 	
 	
 }
+
