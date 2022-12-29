@@ -9,11 +9,13 @@ import java.util.concurrent.*;
 public class Cliente {
 	public void soyServidor(int puerto) {
 		ExecutorService pool = Executors.newFixedThreadPool(3);
+		List<String> hanSalido=new ArrayList<String>();
 		try(ServerSocket servidor = new ServerSocket(puerto)){
 			while(true) {
 				try {
+					String palabra=br.readLine();
 					Socket s = servidor.accept();
-					pool.submit(new HiloCliente(puerto));
+					pool.submit(new HiloCliente(puerto,palabra));
 				}
 				catch (IOException e) {
 					// TODO Auto-generated catch block
