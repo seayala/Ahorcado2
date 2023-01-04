@@ -17,8 +17,9 @@ public class Respuesta implements Serializable {
 	        this.esta = false;
 	        this.intento = "";
 	        this.posiciones = new ArrayList<>();
-	        this.numFallos = 0;
+	        this.numFallos=0;
 	}
+
 	public boolean isEsta() {
 		return esta;
 	}
@@ -44,6 +45,10 @@ public class Respuesta implements Serializable {
 		this.numFallos = numFallos;
 	}
 	
+	public void setLetraPosicion(int posicion) {
+		this.posiciones.add(posicion);
+	}
 	
 
 }
+
