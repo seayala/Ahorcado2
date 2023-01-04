@@ -10,12 +10,13 @@ public class Cliente {
 	public void soyServidor(int puerto) {
 		ExecutorService pool = Executors.newFixedThreadPool(3);
 		List<String> hanSalido=new ArrayList<String>();
-		try(ServerSocket servidor = new ServerSocket(puerto)){
+		try(ServerSocket servidor = new ServerSocket(puerto);BufferedReader br= new BufferedReader(new InputStreamReader(System.in))){
 			while(true) {
 				try {
 					String palabra=br.readLine();
 					Socket s = servidor.accept();
-					pool.submit(new HiloCliente(puerto,palabra));
+					Respuesta r=new Respuesta();
+					pool.submit(new HiloCliente(puerto,palabra,r));
 				}
 				catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -72,5 +73,3 @@ public class Cliente {
 		}
 	}
 }
-
-
