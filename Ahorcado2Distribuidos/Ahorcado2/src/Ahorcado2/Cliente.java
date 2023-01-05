@@ -45,25 +45,32 @@ public class Cliente {
 	public static void main(String[] args) {
 		List<DatosUsuario> jugadores = new ArrayList<>();
 		try(Socket s = new Socket("localhost", 6666);
-			DataInputStream dis = new DataInputStream(s.getInputStream())){
+			ObjectInputStream dis = new ObjectInputStream(s.getInputStream())){
 			
-			String jugador = dis.readLine();
-			while(jugador != null) {
-				String split[] = jugador.split(" ? ");
-				if(!s.getLocalAddress().toString().equals(split[0])) {
-					jugadores.add(new DatosUsuario(split[0], Integer.parseInt(split[2])));
+			try {
+				DatosUsuario du = (DatosUsuario) dis.readObject();
+				while(du != null) {
+					if(!s.getLocalAddress().toString().equals(du.getHost())) {
+						jugadores.add(du);
+					}
+					else {
+						if(du.getMaster()) {
+							System.out.println("Eres maestro");
+						}
+					}
+					du = (DatosUsuario) dis.readObject();
 				}
-				jugador = dis.readLine();
+				//Mostrar la lista
+				int indice = 1;
+				for(DatosUsuario user : jugadores) {
+					System.out.println(indice + "- " + user.toString());
+					indice++;
+				}
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			
-			//Mostrar la lista
-			int indice = 1;
-			for(DatosUsuario user : jugadores) {
-				System.out.println(indice + "- " + user.toString());
-				indice++;
-			}
-			
-			
+	
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
