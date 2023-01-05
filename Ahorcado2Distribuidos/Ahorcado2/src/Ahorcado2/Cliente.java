@@ -18,14 +18,14 @@ public class Cliente {
 		try (ServerSocket servidor = new ServerSocket(puerto)) {
 			while (true) {
 				try {
-					//Lectura de la palabra desde la interfaz gráfica (aquí está por teclado)
+					// Lectura de la palabra desde la interfaz gráfica (aquí está por teclado)
 					Scanner sc = new Scanner(System.in);
 					System.out.println("Introduce la palabra:");
 					String palabra = sc.nextLine();
-					
+
 					Socket s = servidor.accept();
 
-					pool.submit(new HiloCliente(s,palabra));
+					pool.submit(new HiloCliente(s, palabra));
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -46,7 +46,7 @@ public class Cliente {
 			// Leemos el tamaño
 			String t = in.readLine();
 			int tam = Integer.parseInt(t);
-			
+
 			String aux = "";
 			for (int i = 0; i < tam; i++) {
 				aux += "_ ";
@@ -58,7 +58,7 @@ public class Cliente {
 				System.out.println("Introduzca el intento");
 				String intento = sc.nextLine();
 				intento = intento.toUpperCase() + "\r\n";
-				
+
 				// Enviamos el intento al servidor
 				bfw.write(intento);
 				bfw.flush();
@@ -68,7 +68,8 @@ public class Cliente {
 
 				// Actualiamos la interfaz gráfica (aquí esta hecho todo para consola).
 				if (resp.getNumFallos() == 28) {
-					System.out.println("Gana");
+					System.out.println("Palabra: " + resp.getIntento().toUpperCase());
+					System.out.println("¡¡¡GANADOR!!!");
 				} else if (resp.isEsta()) {
 					List<Integer> p = resp.getPosiciones();
 					String aux2 = aux;
@@ -97,10 +98,10 @@ public class Cliente {
 					System.out.println("Palabra: " + aux);
 				}
 			} while (resp.getNumFallos() < 11 && salida != 0);
-			if(salida == 0) {
+			if (salida == 0) {
+				System.out.println("Palabra: " + aux);
 				System.out.println("¡¡¡GANADOR!!!");
-			}
-			else if(resp.getNumFallos() != 28){
+			} else if (resp.getNumFallos() != 28) {
 				System.out.println("GAME OVER");
 			}
 		} catch (UnknownHostException e) {
@@ -159,43 +160,53 @@ public class Cliente {
 		}
 		return jugadores;
 	}
-	
+
 	public static void muestraFallo(int numFallos) {
 		String cadena;
-		switch(numFallos){
+		switch (numFallos) {
 		case 1:
 			cadena = "__|_________" + "\r\n" + " |        | ";
-		break;
+			break;
 		case 2:
-			cadena = "  |" + "\r\n" + "  |" + "\r\n" + "  |" + "\r\n" + "  |" + "\r\n" + "  |" + "\r\n" + "__|_________" + "\r\n" + " |        | ";
-		break;
+			cadena = "  |" + "\r\n" + "  |" + "\r\n" + "  |" + "\r\n" + "  |" + "\r\n" + "  |" + "\r\n" + "__|_________"
+					+ "\r\n" + " |        | ";
+			break;
 		case 3:
-			cadena = "  _______" + "\r\n" + "  |" + "\r\n" + "  |" + "\r\n" + "  |" + "\r\n" + "  |" + "\r\n" + "  |" + "\r\n" + "__|_________" + "\r\n" + " |        | ";
-		break;
+			cadena = "  _______" + "\r\n" + "  |" + "\r\n" + "  |" + "\r\n" + "  |" + "\r\n" + "  |" + "\r\n" + "  |"
+					+ "\r\n" + "__|_________" + "\r\n" + " |        | ";
+			break;
 		case 4:
-			cadena = "  _______" + "\r\n" + "  |/" + "\r\n" + "  |" + "\r\n" + "  |" + "\r\n" + "  |" + "\r\n" + "  |" + "\r\n" + "__|_________" + "\r\n" + " |        | ";
-		break;
+			cadena = "  _______" + "\r\n" + "  |/" + "\r\n" + "  |" + "\r\n" + "  |" + "\r\n" + "  |" + "\r\n" + "  |"
+					+ "\r\n" + "__|_________" + "\r\n" + " |        | ";
+			break;
 		case 5:
-			cadena = "  _______" + "\r\n" + "  |/    |" + "\r\n" + "  |" + "\r\n" + "  |" + "\r\n" + "  |" + "\r\n" + "  |" + "\r\n" + "__|_________" + "\r\n" + " |        | ";
-		break;
+			cadena = "  _______" + "\r\n" + "  |/    |" + "\r\n" + "  |" + "\r\n" + "  |" + "\r\n" + "  |" + "\r\n"
+					+ "  |" + "\r\n" + "__|_________" + "\r\n" + " |        | ";
+			break;
 		case 6:
-			cadena = "  _______" + "\r\n" + "  |/    |" + "\r\n" + "  |     o" + "\r\n" + "  |" + "\r\n" + "  |" + "\r\n" + "  |" + "\r\n" + "__|_________" + "\r\n" + " |        | ";
-		break;
+			cadena = "  _______" + "\r\n" + "  |/    |" + "\r\n" + "  |     o" + "\r\n" + "  |" + "\r\n" + "  |"
+					+ "\r\n" + "  |" + "\r\n" + "__|_________" + "\r\n" + " |        | ";
+			break;
 		case 7:
-			cadena = "  _______" + "\r\n" + "  |/    |" + "\r\n" + "  |     o" + "\r\n" + "  |     |" + "\r\n" + "  |" + "\r\n" + "  |" + "\r\n" + "__|_________" + "\r\n" + " |        | ";
-		break;
+			cadena = "  _______" + "\r\n" + "  |/    |" + "\r\n" + "  |     o" + "\r\n" + "  |     |" + "\r\n" + "  |"
+					+ "\r\n" + "  |" + "\r\n" + "__|_________" + "\r\n" + " |        | ";
+			break;
 		case 8:
-			cadena = "  _______" + "\r\n" + "  |/    |" + "\r\n" + "  |     o" + "\r\n" + "  |    /|" + "\r\n" + "  |" + "\r\n" + "  |" + "\r\n" + "__|_________" + "\r\n" + " |        | ";
-		break;
+			cadena = "  _______" + "\r\n" + "  |/    |" + "\r\n" + "  |     o" + "\r\n" + "  |    /|" + "\r\n" + "  |"
+					+ "\r\n" + "  |" + "\r\n" + "__|_________" + "\r\n" + " |        | ";
+			break;
 		case 9:
-			cadena = "  _______" + "\r\n" + "  |/    |" + "\r\n" + "  |     o" + "\r\n" + "  |    /|\\" + "\r\n" + "  |" + "\r\n" + "  |" + "\r\n" + "__|_________" + "\r\n" + " |        | ";
-		break;
+			cadena = "  _______" + "\r\n" + "  |/    |" + "\r\n" + "  |     o" + "\r\n" + "  |    /|\\" + "\r\n" + "  |"
+					+ "\r\n" + "  |" + "\r\n" + "__|_________" + "\r\n" + " |        | ";
+			break;
 		case 10:
-			cadena = "  _______" + "\r\n" + "  |/    |" + "\r\n" + "  |     o" + "\r\n" + "  |    /|\\" + "\r\n" + "  |    / " + "\r\n" + "  |" + "\r\n" + "__|_________" + "\r\n" + " |        | ";
-		break;
+			cadena = "  _______" + "\r\n" + "  |/    |" + "\r\n" + "  |     o" + "\r\n" + "  |    /|\\" + "\r\n"
+					+ "  |    / " + "\r\n" + "  |" + "\r\n" + "__|_________" + "\r\n" + " |        | ";
+			break;
 		case 11:
-			cadena = "  _______" + "\r\n" + "  |/    |" + "\r\n" + "  |     o" + "\r\n" + "  |    /|\\" + "\r\n" + "  |    / \\" + "\r\n" + "  |" + "\r\n" + "__|_________" + "\r\n" + " |        | ";
-		break;
+			cadena = "  _______" + "\r\n" + "  |/    |" + "\r\n" + "  |     o" + "\r\n" + "  |    /|\\" + "\r\n"
+					+ "  |    / \\" + "\r\n" + "  |" + "\r\n" + "__|_________" + "\r\n" + " |        | ";
+			break;
 		default:
 			cadena = "";
 		}
