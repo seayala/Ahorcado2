@@ -82,14 +82,17 @@ public class HiloCliente implements Runnable {
 						r.setPosiciones(new ArrayList<>());
 					}
 				}
-
+				//PARA CUANDO PIERDAN
+				if(r.getNumFallos() >= 11 && r.getNumFallos() != 28) {
+					r.setIntento(palabra);
+				}
 				// Enviamos el objeto
 				out.writeObject(r);
 				out.flush();
 				hanSalido.add(intento);
 				numFallos = r.getNumFallos();
 			} while (r.getNumFallos() < 11 && salida != 0);
-
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
