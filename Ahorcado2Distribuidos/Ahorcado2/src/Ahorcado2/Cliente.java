@@ -98,11 +98,12 @@ public class Cliente {
 					System.out.println("Palabra: " + aux);
 				}
 			} while (resp.getNumFallos() < 11 && salida != 0);
-			if (salida == 0) {
-				System.out.println("Palabra: " + aux);
+			if(salida == 0) {
 				System.out.println("¡¡¡GANADOR!!!");
-			} else if (resp.getNumFallos() != 28) {
+			}
+			else if(resp.getNumFallos() != 28){
 				System.out.println("GAME OVER");
+				System.out.println("La palabra era: " + resp.getIntento());
 			}
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
