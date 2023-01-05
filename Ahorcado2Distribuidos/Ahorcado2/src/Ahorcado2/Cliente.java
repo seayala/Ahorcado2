@@ -89,10 +89,12 @@ public class Cliente {
 						}
 					}
 					aux = aux2 + " ";
+					muestraFallo(resp.getNumFallos());
 					System.out.println("Palabra: " + aux);
 				} else {
 					System.out.println("La letra no está");
 					muestraFallo(resp.getNumFallos());
+					System.out.println("Palabra: " + aux);
 				}
 			} while (resp.getNumFallos() < 11 && salida != 0);
 			if(salida == 0) {
