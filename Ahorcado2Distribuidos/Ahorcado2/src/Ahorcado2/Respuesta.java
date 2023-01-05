@@ -12,6 +12,7 @@ public class Respuesta implements Serializable {
 	private String intento;
 	private List<Integer> posiciones;
 	private int numFallos;
+
 	public Respuesta(){
 		super();
 	        this.esta = false;
@@ -51,4 +52,3 @@ public class Respuesta implements Serializable {
 	
 
 }
-
