@@ -9,7 +9,7 @@ import java.util.concurrent.*;
 //Para el cliente que ponga la palabra, actua como servidor
 public class HiloCliente implements Runnable {
 	private Socket s;
-	private List<String> hanSalido;
+	private List<String> hanSalido; //Lista que contiene las palabras o caracteres que el usuario ya ha introducido
 	private String palabra;
 	private List<Character> letras = new ArrayList<>();
 
@@ -18,12 +18,13 @@ public class HiloCliente implements Runnable {
 		this.s = s;
 		this.hanSalido = new ArrayList<String>();
 		this.palabra = palabra;
-		// Troceamos la palabra
+		// Troceamos la palabra en una lista de caracteres
 		for (int i = 0; i < palabra.length(); i++) {
 			this.letras.add(palabra.charAt(i));
 		}
 	}
 
+	//funcion que te devuelve las posiciones de una letra en uan determinada palabra
 	private static List<Integer> contieneLetra(List<Character> letras, Character letra) {
 		List<Integer> posiciones = new ArrayList<>();
 		for (int i = 0; i < letras.size(); i++) {
@@ -41,15 +42,15 @@ public class HiloCliente implements Runnable {
 			BufferedReader in = new BufferedReader(new InputStreamReader(this.s.getInputStream()));
 			ObjectOutputStream out = new ObjectOutputStream(this.s.getOutputStream())) {
 			
-			// Enviamos el tamaño de la palabra
-			String tamaño = palabra.length() + "\r\n";
-			bfw.write(tamaño);
+			// Enviamos el tamaÃ±o de la palabra
+			String tamano = palabra.length() + "\r\n";
+			bfw.write(tamano);
 			bfw.flush();
 
 			Respuesta r;
 			int numFallos = 0;
 			int salida = palabra.length();
-			// Juego
+			// Aqui comienza el juego del ahorcado
 			do {
 				r = new Respuesta();
 				r.setNumFallos(numFallos);
@@ -58,8 +59,8 @@ public class HiloCliente implements Runnable {
 				if (hanSalido.contains(intento)) {
 					r.setEsta(false);
 					r.setPosiciones(new ArrayList<>());
-					// No se actualiza el número de fallos.
-				} else if (intento.length() == 1) {
+					// No se actualiza el numero de fallos puesto que el intento ya ha ha sido introducido anteriormente.
+				} else if (intento.length() == 1) { //el intento es un letra
 					Character letra = intento.charAt(0);
 					List<Integer> posiciones = contieneLetra(letras, letra);
 					if (posiciones.size() == 0) {
@@ -74,7 +75,7 @@ public class HiloCliente implements Runnable {
 				} else { // El intento es una palabra
 					if (palabra.equals(intento)) {
 						r.setEsta(true);
-						r.setNumFallos(28); // Para en el cliente comprobarlo
+						r.setNumFallos(28); //se acierta la palabra el juego se ha acabado por lo que ponemos en respuesta un número de fallos imposible de alcanzar de manera naturayl en el juego
 						r.setPosiciones(new ArrayList<>());
 					} else {
 						r.setEsta(false);
@@ -82,16 +83,16 @@ public class HiloCliente implements Runnable {
 						r.setPosiciones(new ArrayList<>());
 					}
 				}
-				//PARA CUANDO PIERDAN
+				//El jugador pierde el juego contra el master
 				if(r.getNumFallos() >= 11 && r.getNumFallos() != 28) {
 					r.setIntento(palabra);
 				}
-				// Enviamos el objeto
+				// Enviamos el objeto respuesta con los datos de la parrtida
 				out.writeObject(r);
 				out.flush();
 				hanSalido.add(intento);
 				numFallos = r.getNumFallos();
-			} while (r.getNumFallos() < 11 && salida != 0);
+			} while (r.getNumFallos() < 11 && salida != 0); 
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
