@@ -8,17 +8,17 @@ import java.util.Scanner;
 import java.util.concurrent.*;
 
 public class Cliente {
-	private static boolean soyMaster = false;
+	private static boolean soyMaster = false; 
 	private static int puertoMaster;
 	private static String hostMaster;
 
 	public static void soyServidor(int puerto) {
-		ExecutorService pool = Executors.newFixedThreadPool(3);
+		ExecutorService pool = Executors.newFixedThreadPool(3); //3 jugadores y 1 master
 		List<String> hanSalido = new ArrayList<String>();
 		try (ServerSocket servidor = new ServerSocket(puerto)) {
 			while (true) {
 				try {
-					// Lectura de la palabra desde la interfaz gráfica (aquí está por teclado)
+					// Lectura de la palabra desde la interfaz grafica
 					Scanner sc = new Scanner(System.in);
 					System.out.println("Introduce la palabra:");
 					String palabra = sc.nextLine();
@@ -43,7 +43,7 @@ public class Cliente {
 				ObjectInputStream ois = new ObjectInputStream(jugador.getInputStream());
 				BufferedReader in = new BufferedReader(new InputStreamReader(jugador.getInputStream()));
 				BufferedWriter bfw = new BufferedWriter(new OutputStreamWriter(jugador.getOutputStream()))) {
-			// Leemos el tamaño
+			// Leemos el tamano
 			String t = in.readLine();
 			int tam = Integer.parseInt(t);
 
@@ -66,10 +66,10 @@ public class Cliente {
 				// Obtenemos el objeto respuesta
 				resp = (Respuesta) ois.readObject();
 
-				// Actualiamos la interfaz gráfica (aquí esta hecho todo para consola).
+				// Actualizamos la interfaz grafica respecto al objeto respuesta obtenido
 				if (resp.getNumFallos() == 28) {
 					System.out.println("Palabra: " + resp.getIntento().toUpperCase());
-					System.out.println("¡¡¡GANADOR!!!");
+					System.out.println("Â¡Â¡Â¡GANADOR!!!");
 				} else if (resp.isEsta()) {
 					List<Integer> p = resp.getPosiciones();
 					String aux2 = aux;
@@ -93,13 +93,13 @@ public class Cliente {
 					muestraFallo(resp.getNumFallos());
 					System.out.println("Palabra: " + aux);
 				} else {
-					System.out.println("La letra no está");
+					System.out.println("La letra no estÃ¡");
 					muestraFallo(resp.getNumFallos());
 					System.out.println("Palabra: " + aux);
 				}
 			} while (resp.getNumFallos() < 11 && salida != 0);
 			if(salida == 0) {
-				System.out.println("¡¡¡GANADOR!!!");
+				System.out.println("Â¡Â¡Â¡GANADOR!!!");
 			}
 			else if(resp.getNumFallos() != 28){
 				System.out.println("GAME OVER");
